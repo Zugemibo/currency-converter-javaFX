@@ -1,0 +1,7 @@
+.choice-box {
+    -fx-pref-width: 100;
+}
+.choice-box-popup > .list-view {
+    -fx-pref-width: 100;
+    -fx-pref-heigth: 200;
+}
