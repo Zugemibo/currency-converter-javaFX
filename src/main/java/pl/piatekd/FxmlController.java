@@ -16,6 +16,8 @@ import com.google.gson.reflect.TypeToken;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -104,8 +106,9 @@ public class FxmlController implements Initializable {
 
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
-        setComboBox(cbBaseCurrency);
-        setComboBox(cbOutputCurrency);
+        setTextFieldNumericOnly(tfQuantity);
+        setComboBoxValuesAndProperties(cbBaseCurrency);
+        setComboBoxValuesAndProperties(cbOutputCurrency);
         try {
             getData();
         } catch (IOException e) {
@@ -114,7 +117,19 @@ public class FxmlController implements Initializable {
 
     }
 
-    protected void setComboBox(ComboBox<CurrencyShortName> comboBox){
+    protected void setTextFieldNumericOnly(JFXTextField textField) {
+        textField.textProperty().addListener(new ChangeListener<>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue,
+                                String newValue) {
+                if (!newValue.matches("\\d*")) {
+                    textField.setText(newValue.replaceAll("[^\\d]", ""));
+                }
+            }
+        });
+    }
+
+    protected void setComboBoxValuesAndProperties(ComboBox<CurrencyShortName> comboBox) {
         comboBox.setTooltip(new Tooltip());
         comboBox.getItems().setAll(CurrencyShortName.values());
         new ComboBoxAutoComplete<>(comboBox);
